@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Catch the Ball Game</title>
+<style>
+body{margin:0;background:#222;color:white;text-align:center;font-family:Arial}
+#score{font-size:22px;margin:15px}
+#game{width:95%;max-width:400px;height:550px;background:white;margin:auto;position:relative;overflow:hidden;border-radius:15px}
+.ball{position:absolute;width:50px;height:50px;background:red;border-radius:50%;cursor:pointer}
+#restart{padding:12px 25px;margin:15px;font-size:18px;background:lime;border:none;border-radius:10px;font-weight:bold}
+</style>
+</head>
+<body>
+<h2>Catch the Ball!</h2>
+<div id="score">Score: 0 | Time: 30</div>
+<div id="game"></div>
+<button id="restart" onclick="startGame()">Restart Game</button>
+<script>
+let score=0,time=30;
+let gameBox, scoreBox;
+let ballTimer, timeTimer;
+
+function init(){
+  gameBox=document.getElementById('game');
+  scoreBox=document.getElementById('score');
+  startGame();
+}
+function startGame(){
+  score=0;time=30;gameBox.innerHTML='';
+  clearInterval(ballTimer);clearInterval(timeTimer);
+  scoreBox.innerHTML='Score: 0 | Time: 30';
+  ballTimer=setInterval(createBall,700);
+  timeTimer=setInterval(function(){
+    time--;
+    scoreBox.innerHTML='Score: '+score+' | Time: '+time;
+    if(time<=0){clearInterval(ballTimer);clearInterval(timeTimer);alert('Game Over! Score: '+score);}
+  },1000);
+}
+function createBall(){
+  let b=document.createElement('div');
+  b.className='ball';
+  b.style.left=Math.random()*330+'px';
+  b.style.top='0px';
+  b.onclick=function(){score++;scoreBox.innerHTML='Score: '+score+' | Time: '+time; b.remove();}
+  gameBox.appendChild(b);
+  let y=0;
+  let fall=setInterval(function(){y+=5;b.style.top=y+'px';if(y>520){clearInterval(fall);b.remove();}},20);
+}
+window.onload=init;
+</script>
+</body>
+</html>
